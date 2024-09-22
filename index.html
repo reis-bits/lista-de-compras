@@ -18,7 +18,7 @@
         <img src="./img/bag.png" alt="sacola de compras">
         <form>
             <input class="input-item" id="campo-item" type="text" placeholder="Digite o item que deseja adicionar"></input>
-            <button class="button-item" id="btn-salvar-item" type="button">Salvar item</button>
+            <button class="button-item" id="btn-salvar-item" type="button" onclick="adicionarItem()">Salvar item</button>
         </form>
 
         <div class="container-lista">
@@ -30,9 +30,9 @@
                     <div class="lista-item-container">
                         <div>
                             <div class="container-checkbox">
-                                <label for="checkbox-1">
-                                    <input type="checkbox" class="input-checkbox"/>
-                                    <div class="checkbox-customizado checked" id="checkbox-" onclick="checkbox()"></div>
+                                <label for="checkbox-">
+                                    <input type="checkbox" class="input-checkbox" id="checkbox-"/>
+                                    <div class="checkbox-customizado checked"  onclick="checkbox()"></div>
                                 </label>
                             </div>
                             <p>Ração de gato</p>
