@@ -1,78 +1,130 @@
-// Variáveis diversas com elementos do HTML, sendo: O input para digitar o item, uma lista de compras e um contador de itens. Além de um array contendo os itens.
-const inputItem = document.getElementById('campo-item'); inputItem.value = "";
-const listaDeCompras = document.getElementById('lista-de-compras'); listaDeCompras.innerHTML =  "";
-let contagemItens = 0;
-let itensNaLista = [];
+// Constantes contendo elementos importantes do HTML
+const inputItem = document.getElementById('campo-item');
+const botaoAdicionar = document.getElementById('btn-salvar-item');
+const listaDeCompras = document.getElementById('lista-de-compras'); listaDeCompras.innerHTML = "";
+    // Variável inicializada como 0, devido a presença de nenhum item, o numero aumenta a cada iteração da função adicionarItem.
+    let contagemItens = 0;
 
-// Função que adiciona os itens ao DOM.
+// Ouvintes de evento para uso do teclado.
+inputItem.addEventListener('keydown', (event) => {
+    if(event.key == 'Enter') {
+        event.preventDefault();
+        adicionarItem();
+        inputItem.value = "";
+    }
+    
+});
+
+// Ouvinte de evente para o uso do botao.
+botaoAdicionar.addEventListener('keydown', adicionarItem);
+
+// Função executada no clique do botão que serve para adicionar o item ao carrinho.
 function adicionarItem() {
-    // Pega o item em si através do valor digitado no input
-    let item = inputItem.value;
+    // Recupera o nome do item através do valor digitado no input.
+    const nomeDoItem = inputItem.value;
+    // Retorna caso o input não receba um nome. 
+    if(!nomeDoItem) return;
+    // Cria o item dentro da lista através da função criarItemNaLista que cria o item na lista tendo como parâmetro o nome do item.
+    const itemNaLista = criarItemNaLista(nomeDoItem);
 
-    // Constantes com o valor atribuído à criação dos elementos da lista.
+    // Coloca o item na lista de compras.
+    listaDeCompras.appendChild(itemNaLista);
+
+    inputItem.value = "";
+}
+
+// Função criarItemNaLista que funciona como o título diz e tem como parâmetro 'nome' - e receberá o nome do item.
+function criarItemNaLista(nome) {
+    // Constantes que recebem a criação dos elementos básicos do DOM. Sendo o tópico e o container do item; que recebe uma classe.
     const topicoDaLista = document.createElement('li');
-        const itemNaLista = document.createElement('div'); itemNaLista.classList.add('lista-item-container');
-    topicoDaLista.appendChild(itemNaLista);
+    const containerDoItem = document.createElement('div'); containerDoItem.classList.add('lista-item-container');
 
-    // Constantes com o valor atribuído à criação das informações do item (nome e a checkbox denunciando se ja foi comprado, ou não.)
+    // Constantes que recebem duas funções, criando as informações do item e outra as opções deste.
+    const infoDoItem = criarInfoDoItem(nome);
+    const opcoesDoItem = criarOpcoesDoItem();
+
+    // Acrescenta as informações e opções deste item ao seu container.
+    containerDoItem.appendChild(infoDoItem);
+    containerDoItem.appendChild(opcoesDoItem);
+    // Acrescenta o container do item ao tópico da lista.
+    topicoDaLista.append(containerDoItem);
+    
+    // Retorna como resultado da função o tópico da lista contendo todas as informações necessárias.
+    return topicoDaLista;
+}
+
+// Função criarInfoDoItem, com um título bem sugestivo, tendo um parâmetro nome - que vai receber o nome do item.
+function criarInfoDoItem(nome) {
+    // Constante infoDoItem que recebe a criação de um elemento div que vai ser container pras informações do item.
     const infoDoItem = document.createElement('div');
-        // Constante cria um paragráfo para o nome do item //Resgata o nome do item.        
-        const nomeDoItem =  document.createElement('p'); nomeDoItem.innerText = item;
+    
+    // Constante nomeDoItem que recebe a criação de um parágrafo; o parágrafo depois recebe em texto, o nome do Item.
+    const nomeDoItem =  document.createElement('p'); nomeDoItem.innerText = nome;
+    // Constante containerCheckbox que recebe uma função sem parâmetros para criar a checkbox no HTML.
+    const containerCheckbox =  criarCheckbox();
 
-        // Costante com todas as informações da checkbox. O container, a label e o input, e o checkbox customizado.
-        const containerCheckbox =  document.createElement('div'); containerCheckbox.classList.add('container-checkbox'); 
-
-            const labelCheckbox = document.createElement('label'); containerCheckbox.appendChild(labelCheckbox);
-
-            const inputCheckbox =  document.createElement('input'); inputCheckbox.type = "checkbox"; inputCheckbox.classList.add('input-checkbox'); inputCheckbox.id = "checkbox-" + contagemItens++; labelCheckbox.setAttribute("for", inputCheckbox.id);labelCheckbox.appendChild(inputCheckbox); 
-
-            const checkboxCustomizado = document.createElement('div'); checkboxCustomizado.classList.add('checkbox-customizado');labelCheckbox.appendChild(checkboxCustomizado); // checkboxCustomizado.setAttribute("onclick", `checkbox(${inputCheckbox.id})`)
-    // Coloca o container e o nome dentro do container de informação.
+    // O container de informações do item recebe o container com a checkbox e com o nome
     infoDoItem.appendChild(containerCheckbox);
     infoDoItem.appendChild(nomeDoItem);
 
-    // Constante que armazena a criação de uma div para as opções referentes ao item
+    // Retorna como resultado da função o container com as informações do item.
+    return infoDoItem;
+}
+
+// Função que cria a Checkbox
+function criarCheckbox() {
+    // Constante containerCheckbox que recebe a criação de uma div; que recebe uma classe que a marca como container pra checkbox.
+    const containerCheckbox = document.createElement('div'); containerCheckbox.classList.add('container-checkbox')
+
+    // Constante checkboxInput que recebe a criação de um input...
+    const checkboxInput = document.createElement('input');
+        // e recebe seu tipo - uma checkbox; sua classe; e seu id dinâmico, seu id conta qual o item da vez através do contador.
+        checkboxInput.type = "checkbox"; checkboxInput.classList.add('input-checkbox'); checkboxInput.id = "checkbox-" + contagemItens++;
+    // Constante checkboxCustom que recebe a criação de uma div...
+    const checkboxCustom = document.createElement('div');
+        // e recebe sua classe que o marca como uma checkbox customizada.
+        checkboxCustom.classList.add('checkbox-customizado');
+
+    // Constante checkboxLabel que recebe a criação de uma label...
+    const checkboxLabel = document.createElement('label');
+        // e recebe para qual elemento essa label age, além de receber o input e o checkbox custom.
+        checkboxLabel.setAttribute("for", checkboxInput.id);
+        checkboxLabel.appendChild(checkboxInput);
+        checkboxLabel.appendChild(checkboxCustom);
+
+    // O containerCheckbox recebe a checkboxLabel    
+    containerCheckbox.appendChild(checkboxLabel);
+    
+    // Retorna como resultado da função o container contendo tudo do checkbox.
+    return containerCheckbox;
+}
+
+function criarOpcoesDoItem() {
+    // Constante que armazena a criação de uma div.
     const opcoesDoItem = document.createElement('div');
-        // Constante que armazena a criação o botão de remoção
-        const botaoRemover = document.createElement('button'); botaoRemover.classList.add('item-lista-button');
-            const imagemRemover = document.createElement('img'); imagemRemover.src = "img/delete.svg"; imagemRemover.alt = "Remover"
-            botaoRemover.appendChild(imagemRemover);
-        // Constante que armazena a criação do botão de edição
-        const botaoEditar = document.createElement('button'); botaoEditar.classList.add('item-lista-button');
-            const imagemEditar = document.createElement('img'); imagemEditar.src = "img/edit.svg"; imagemEditar.alt = "Editar"
-            botaoRemover.appendChild(imagemEditar);
-    // Coloca ambas as opções de remover e editar no container de opções        
+
+    // Constantes pro botão de remover e pro botão de editar que recebem a função criarBotoes com seus respectivos parâmetros
+    const botaoRemover = criarBotoes('img/delete.svg', 'Deletar');
+    const botaoEditar =  criarBotoes('img/edit.svg', 'Editar');
+
     opcoesDoItem.appendChild(botaoRemover);
     opcoesDoItem.appendChild(botaoEditar);
 
-    // Coloca as informações e opções do item no item.
-    itemNaLista.appendChild(infoDoItem);
-    itemNaLista.appendChild(opcoesDoItem);
-    // Coloca o item na lista
-    listaDeCompras.appendChild(itemNaLista);
+    return opcoesDoItem;
+}
 
-    // Limpa o slot do item.
-    inputItem.value = "";
-};
+function criarBotoes(src, alt) {
+    // Constante botao que armazena a criação de um botao; que recebe sua classe.
+    const botao = document.createElement('button'); botao.classList.add('item-lista-button');
 
-// function checkbox(i) {
+    // Constante imagem que armazena a criação de uma imagem, ela recebe seu source e seu texto alternativo de acordo com os parâmetros
+    const imagem = document.createElement('img');
+    imagem.src = src;
+    imagem.alt =  alt;
 
-//     let checkboxItem = document.getElementById(i);
-    
-//     if(checkboxItem.classList.contains('checked')) {
-//         checkboxItem.classList.remove('checked');
-//     } else {
-//         checkboxItem.classList.add('checked');
-//     }
-// }
+    // Guarda a imagem dentro do botão
+    botao.appendChild(imagem);
 
-// function deletar(i) {
-//     let itemDaLista = document.getElementById('item-' + i);
-//     itensNaLista.splice(i, 1);
-//     listaDeCompras.removeChild(itemDaLista);
-// }
-
-// function editar(i) {
-//     let nomeDoItem = document.getElementById('nome-item-' + i);
-//     nomeDoItem.innerHTML = prompt('Digite um novo nome');
-// }
+    // Retorna como resultado da função o botão contendo as informações necessárias.
+    return botao;
+}

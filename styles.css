@@ -158,3 +158,62 @@ ul {
 .container-lista {
     width: 100%;
 }
+
+@media (max-width: 576px) {
+    main {
+        margin-top: 12.40dvh;
+        margin-bottom: 12.40dvh;
+        border-radius: 0px;
+        background: transparent;
+        width: 100%;
+        height: 100dvh;
+    }
+
+    p {
+        font-family: var(--fonte-texto);
+        color: var(--neutro);
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 24px;
+        text-align: left;
+    }
+
+    .input-checkbox {
+        display: none;
+    }
+    
+    .checkbox-customizado {
+        width: 20px;
+        height: 20px;
+        background-color: var(--neutro);
+        border: 1px solid var(--neutro);
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    
+    .checked {
+        background-color: var(--neutro);
+        position: relative;
+    }
+    
+    .checkbox-customizado.checked::after {
+        content: "";
+        position: absolute;
+        left: 30%;
+        top: -10%;
+        width: 5px;
+        height: 14px;
+    
+        border-top: 2px solid var(--preto);
+        border-left: 2px solid var(--preto);
+    
+        transform: rotate(-140deg);
+    }
+
+    .item-lista-button {
+        filter:invert(100%) sepia(0%) saturate(0%) hue-rotate(263deg) brightness(107%) contrast(95%);
+        border: none;
+        background-color: transparent;
+    }
+
+}
