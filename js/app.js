@@ -2,6 +2,7 @@
 const inputItem = document.getElementById('campo-item');
 const botaoAdicionar = document.getElementById('btn-salvar-item');
 const listaDeCompras = document.getElementById('lista-de-compras'); listaDeCompras.innerHTML = "";
+const listaComprados = document.getElementById('lista-de-comprados');
     // Variável inicializada como 0, devido a presença de nenhum item, o numero aumenta a cada iteração da função adicionarItem.
     let contagemItens = 0;
 
@@ -16,7 +17,7 @@ inputItem.addEventListener('keydown', (event) => {
 });
 
 // Ouvinte de evente para o uso do botao.
-botaoAdicionar.addEventListener('keydown', adicionarItem);
+botaoAdicionar.addEventListener('click', adicionarItem);
 
 // Função executada no clique do botão que serve para adicionar o item ao carrinho.
 function adicionarItem() {
@@ -26,6 +27,7 @@ function adicionarItem() {
     if(!nomeDoItem) return;
     // Cria o item dentro da lista através da função criarItemNaLista que cria o item na lista tendo como parâmetro o nome do item.
     const itemNaLista = criarItemNaLista(nomeDoItem);
+   
 
     // Coloca o item na lista de compras.
     listaDeCompras.appendChild(itemNaLista);
@@ -42,13 +44,16 @@ function criarItemNaLista(nome) {
     // Constantes que recebem duas funções, criando as informações do item e outra as opções deste.
     const infoDoItem = criarInfoDoItem(nome);
     const opcoesDoItem = criarOpcoesDoItem();
+    const dataDoItem = document.createElement('p');
+        dataDoItem.innerText = `${new Date().toLocaleDateString('pt-BR', { weekday: "long" })} (${new Date().toLocaleDateString()}) às ${new Date().toLocaleTimeString('pt-BR', {hour: "numeric", minute: "numeric"})}`;
+        dataDoItem.classList.add('texto-data')
 
     // Acrescenta as informações e opções deste item ao seu container.
     containerDoItem.appendChild(infoDoItem);
     containerDoItem.appendChild(opcoesDoItem);
     // Acrescenta o container do item ao tópico da lista.
-    topicoDaLista.append(containerDoItem);
-    
+    topicoDaLista.appendChild(containerDoItem);
+    topicoDaLista.appendChild(dataDoItem);
     // Retorna como resultado da função o tópico da lista contendo todas as informações necessárias.
     return topicoDaLista;
 }
@@ -59,7 +64,7 @@ function criarInfoDoItem(nome) {
     const infoDoItem = document.createElement('div');
     
     // Constante nomeDoItem que recebe a criação de um parágrafo; o parágrafo depois recebe em texto, o nome do Item.
-    const nomeDoItem =  document.createElement('p'); nomeDoItem.innerText = nome;
+    const nomeDoItem =  document.createElement('p'); nomeDoItem.innerText = nome; nomeDoItem.id = "item-titulo";
     // Constante containerCheckbox que recebe uma função sem parâmetros para criar a checkbox no HTML.
     const containerCheckbox =  criarCheckbox();
 
@@ -91,6 +96,9 @@ function criarCheckbox() {
         checkboxLabel.setAttribute("for", checkboxInput.id);
         checkboxLabel.appendChild(checkboxInput);
         checkboxLabel.appendChild(checkboxCustom);
+
+    // Ouvinte de evento que ouve o clique no rótulo da checkbox e chama a checagemItem como um argumento, a função é disparada pelo clique.
+    checkboxLabel.addEventListener('click', checagemItem);
 
     // O containerCheckbox recebe a checkboxLabel    
     containerCheckbox.appendChild(checkboxLabel);
@@ -127,4 +135,30 @@ function criarBotoes(src, alt) {
 
     // Retorna como resultado da função o botão contendo as informações necessárias.
     return botao;
+}
+
+
+// Função que realiza a checagem do checkbox.
+function checagemItem(event) {
+    // Recupera o input e o checkbox custom - event é em referência ao clique do botão.
+    const checkboxInput = event.currentTarget.querySelector('.input-checkbox');
+    const checkboxCustom = event.currentTarget.querySelector('.checkbox-customizado');
+    // Mesmo esquema, mas recupera o tópico e o nome do item através do elemento requisitado mais próximo.
+    const topicoDaLista = event.currentTarget.closest('li');
+    // Neste caso, pega dentro da li mais próxima o item que tiver o id item-titulo. No caso o nome do item de fato.
+    const nomeDoItem = event.currentTarget.closest('li').querySelector('#item-titulo');
+
+
+    // Valida o estado do input
+    if(checkboxInput.checked) {
+        // Se estiver checado adicione a classe checked ao checkbox customizado, mova para a lista de comprados e adicione uma linha riscando.
+        checkboxCustom.classList.add('checked');
+        listaComprados.appendChild(topicoDaLista);
+        nomeDoItem.style.textDecoration = "line-through"
+    } else {
+        // Se não estiver, remova a classe checked, volte pra lista de compras e remova a linha.
+        checkboxCustom.classList.remove('checked');
+        listaDeCompras.appendChild(topicoDaLista);
+        nomeDoItem.style.textDecoration = "none"
+    }
 }
