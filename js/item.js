@@ -52,6 +52,10 @@ function criarOpcoesDoItem() {
     opcoesDoItem.appendChild(botaoRemover);
     opcoesDoItem.appendChild(botaoEditar);
 
+    // Ouvintes de evento de ambos os botões para suas funcionalidades.
+    botaoRemover.addEventListener("click", removerItem);
+    botaoEditar.addEventListener("click", editarItem);
+
     return opcoesDoItem;
 }
 
@@ -69,4 +73,14 @@ function criarBotoes(src, alt) {
 
     // Retorna como resultado da função o botão contendo as informações necessárias.
     return botao;
+}
+
+function removerItem(event) {
+    const topicoDaLista = event.currentTarget.closest('li');
+    topicoDaLista.remove();
+}
+
+function editarItem(event) {
+    const nomeDoItem =  event.currentTarget.closest('li').querySelector('#item-titulo');
+    nomeDoItem.innerText = prompt('Digite o nome do novo item')
 }

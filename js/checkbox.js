@@ -1,5 +1,5 @@
 import {listaDeCompras, listaComprados} from "./main.js";
-    // Variável inicializada como 0, devido a presença de nenhum item, o numero aumenta a cada iteração da função adicionarItem.
+// Variável inicializada como 0, devido a presença de nenhum item, o numero aumenta a cada iteração da função adicionarItem.
     let contagemItens = 0;
 
 // Função que cria a Checkbox
