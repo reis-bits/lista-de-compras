@@ -3,7 +3,8 @@ import { criarItemNaLista } from "./item.js";
 // Constantes contendo elementos importantes do HTML
 const inputItem = document.getElementById('campo-item');
 const botaoAdicionar = document.getElementById('btn-salvar-item');
-export const listaDeCompras = document.getElementById('lista-de-compras'); listaDeCompras.innerHTML = "";
+const mensagemVazia = document.getElementById('mensagem-lista-vazia');
+export const listaDeCompras = document.getElementById('lista-de-compras'); 
 export const listaComprados = document.getElementById('lista-de-comprados');
     
 
@@ -28,12 +29,21 @@ function adicionarItem() {
     if(!nomeDoItem) return;
     // Cria o item dentro da lista através da função criarItemNaLista que cria o item na lista tendo como parâmetro o nome do item.
     const itemNaLista = criarItemNaLista(nomeDoItem);
-   
 
     // Coloca o item na lista de compras.
     listaDeCompras.appendChild(itemNaLista);
 
+    verificarListaVazia(listaDeCompras);
+
     inputItem.value = "";
+}
+
+export function verificarListaVazia(lista) {
+    if(lista.childElementCount === 0) {
+        mensagemVazia.style.display = "block";
+    } else {
+        mensagemVazia.style.display = "none";
+    }
 }
 
 

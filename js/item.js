@@ -1,4 +1,5 @@
 import { criarCheckbox } from "./checkbox.js";
+import { listaDeCompras, verificarListaVazia } from "./main.js";
 
 // Função criarItemNaLista que funciona como o título diz e tem como parâmetro 'nome' - e receberá o nome do item.
 export function criarItemNaLista(nome) {
@@ -78,6 +79,8 @@ function criarBotoes(src, alt) {
 function removerItem(event) {
     const topicoDaLista = event.currentTarget.closest('li');
     topicoDaLista.remove();
+
+    verificarListaVazia(listaDeCompras);
 }
 
 function editarItem(event) {
