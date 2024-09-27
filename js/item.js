@@ -86,4 +86,8 @@ function removerItem(event) {
 function editarItem(event) {
     const nomeDoItem =  event.currentTarget.closest('li').querySelector('#item-titulo');
     nomeDoItem.innerText = prompt('Digite o nome do novo item')
+
+    const dataDoItem = event.currentTarget.closest('li').querySelector('.texto-data');
+        dataDoItem.innerText = `${new Date().toLocaleDateString('pt-BR', { weekday: "long" })} (${new Date().toLocaleDateString()}) às ${new Date().toLocaleTimeString('pt-BR', {hour: "numeric", minute: "numeric"})}`;
+        dataDoItem.classList.add('texto-data')
 }
